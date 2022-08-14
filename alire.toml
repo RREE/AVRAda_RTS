@@ -1,0 +1,23 @@
+name = "avrada_rts"
+description = "Minimal run time system (RTS) for AVR 8bit controllers"
+version = "2.0.0-pre_1"
+
+maintainers = ["Rolf Ebert <rolf.ebert@gcc.gmx.de>"]
+maintainers-logins = ["RREE"]
+
+[gpr-externals]
+ARCH = ["avr25", "avr4", "avr5", "avr51", "avr6"]
+
+# [configuration]
+# generate_gpr = false
+# generate_c = false
+
+[configuration.variables]
+AVR_Architecture = { type = "Enum", values = ["avr25", "avr4", "avr5", "avr51", "avr6"], default = "avr5" }
+Sec_Stack_Size   = { type = "Integer", first = 0, last = 1024, default = 127 }
+
+[configuration.values]
+# avrada_rts.arch
+
+# [[depends-on]]
+# gnat = "~12"

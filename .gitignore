@@ -1,5 +1,8 @@
-# Object file
+/adalib*/
+/alire/
+/config/
+ada_target_properties
 *.o
-
-# Ada Library Information
 *.ali
+*.a
+*.elf

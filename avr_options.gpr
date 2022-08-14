@@ -1,0 +1,55 @@
+--  This is the default version of the target_options.gpr file,
+--  imported by runtime_build.gpr. Variables defined here are appended
+--  to the corresponding variables there. Target configurations may
+--  their own version of this file.
+
+abstract project AVR_Options is
+
+   type Build_Type is ("Production", "Debug");
+   Build : Build_Type := external ("RUNTIME_BUILD", "Debug");
+
+   --  COMFLAGS here is common flags (used for C and Ada).
+   COMFLAGS := ("-fcallgraph-info=su,da",
+                "-ffunction-sections",  --  create separate function sections
+                "-fdata-sections");     --  create separate data sections
+
+   --  Per language flags (COMFLAGS will be added later)
+   ADAFLAGS := ("-gnatg",          --  internal GNAT implementation mode.
+                "-gnatn",          --  enable inlining across modules
+                "-gnatef",         --  full path in error messages
+                "-fverbose-asm",   --  include names of variables in asm code
+                "-nostdinc",       --  Don't search the default location for the RTS.
+                "-fno-delete-null-pointer-checks" --  ???
+               );
+   ASMFLAGS := ("");
+   CFLAGS := ("-DIN_RTS",
+              "-Dinhibit_libc", "-Wall");
+   case Build is
+      when "Production" =>
+         --  Optimize
+         COMFLAGS := COMFLAGS & ("-Os");
+         ADAFLAGS := ADAFLAGS & ("-gnatp",     --  suppress run-time checks
+                                 "-frename-registers", 
+                                 --  avoid false dependencies in scheduled code
+                                 --  Attempt to avoid false dependencies in scheduled code by
+                                 --  making use of registers left over after register
+                                 --  allocation.  This optimization will most benefit
+                                 --  processors with lots of registers. It can, however, make
+                                 --  debugging impossible, since variables will no longer stay
+                                 --  in a "home register".
+                                 "-gnatVn",    --  no validity checks (smaller code)
+                                 "-gnatn2");   --  full inlining across units
+      when "Debug" =>
+         --  Disable optimization and add debug symbols
+         COMFLAGS := COMFLAGS & ("-Og",           --  optimize for debugging
+                                 "-g",            --  generate debug symbols
+                                 "-gdwarf-2",     --  generate debug symbols
+                                );
+         ASMFLAGS := ASMFLAGS & ("-g");
+   end case;
+
+   --  Concatenate with common flags
+   ALL_ADAFLAGS := ADAFLAGS & COMFLAGS;
+   ALL_CFLAGS := CFLAGS & COMFLAGS;
+   
+end AVR_Options;
