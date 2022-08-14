@@ -2,15 +2,14 @@ name = "avrada_rts"
 description = "Minimal run time system (RTS) for AVR 8bit controllers"
 version = "2.0.0-pre_1"
 
+authors = ["Adacore", "Rolf Ebert"]
 maintainers = ["Rolf Ebert <rolf.ebert@gcc.gmx.de>"]
 maintainers-logins = ["RREE"]
+# licenses = "GCC-exception-3.1"
+website = "https://sourceforge.net/projects/avr-ada/"
 
-[gpr-externals]
-ARCH = ["avr25", "avr4", "avr5", "avr51", "avr6"]
-
-# [configuration]
-# generate_gpr = false
-# generate_c = false
+# [gpr-externals]
+# ARCH = ["avr25", "avr4", "avr5", "avr51", "avr6"]
 
 [configuration.variables]
 AVR_Architecture = { type = "Enum", values = ["avr25", "avr4", "avr5", "avr51", "avr6"], default = "avr5" }
@@ -20,4 +19,4 @@ Sec_Stack_Size   = { type = "Integer", first = 0, last = 1024, default = 127 }
 # avrada_rts.arch
 
 # [[depends-on]]
-# gnat = "~12"
+# gnat = "^12"
