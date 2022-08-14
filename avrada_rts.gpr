@@ -1,0 +1,69 @@
+with "avr_tool_options.gpr";
+with "mcu.gpr";
+
+project AVRAda_RTS is
+
+   for Languages use ("Ada", "Asm_CPP");
+
+   for Runtime ("Ada") use Project'Project_Dir;
+   for Target use "avr";
+   
+   for Library_Auto_Init use "False";
+   for Library_Name use "gnat";
+   for Library_Kind use "static";
+
+   for Library_Dir use "adalib";
+   for Object_Dir use "obj";
+
+   for Source_Dirs use ("gnat", "asm");
+
+   package Naming is
+      for Spec_Suffix ("Asm_CPP") use ".inc";
+   end Naming;
+
+   package Compiler is
+      for Default_Switches ("C") use AVR_Tool_Options.ALL_CFLAGS;
+      for Default_Switches ("Ada") use AVR_Tool_Options.ALL_ADAFLAGS;
+      for Default_Switches ("Asm_CPP") use AVR_Tool_Options.ASMFLAGS;
+
+      --  Some runtime files need to be compiled with debug info, so that gdb
+      --  is not blind.
+      for Switches ("a-except.adb") use AVR_Tool_Options.ALL_ADAFLAGS
+        & ("-g", "-O1", "-fno-inline", "-fno-toplevel-reorder");
+      -- for Switches ("s-excdeb.adb") use AVR_Tool_Options.ALL_ADAFLAGS
+      --   & ("-g", "-O0");
+      -- for Switches ("a-tags.adb") use AVR_Tool_Options.ALL_ADAFLAGS
+      --   & ("-g");
+
+      --  Generate ada_target_properties to give target-specific information
+      --  to formal verification tools.
+      for Switches ("system.ads") use AVR_Tool_Options.ALL_ADAFLAGS
+        & ("-gnatet=" & Project'Project_Dir & "/ada_target_properties");
+   end Compiler;
+   
+   --  Provide options for binder and linker.  They are not needed for
+   --  the RTS itself, but can be referenced in the application
+   --  gpr-files
+   
+   package Binder is
+      for Default_Switches ("Ada") use
+        (
+         --  "--RTS=" & Arch, -- binder must know about RTS
+         "-D100",         -- set secondary stack size
+         "-minimal"       -- smaller binder file
+        );
+   end Binder;
+   
+   
+   package Linker is
+      for Default_Switches ("Ada") use 
+        (
+         -- linking the MCU specific libgcc and lib<<mcu>> 
+         "-mmcu=" & MCU.MCU,
+         "-Wl,--gc-sections",     -- remove sections of unused code
+         "-g",                    -- keep binder file (needed???)
+         "-Wl,--relax"            -- linker relaxation
+        ); 
+   end Linker;
+
+end AVRAda_RTS;

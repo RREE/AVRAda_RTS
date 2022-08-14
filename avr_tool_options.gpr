@@ -3,30 +3,34 @@
 --  to the corresponding variables there. Target configurations may
 --  their own version of this file.
 
-abstract project AVR_Options is
+with "mcu.gpr";
+
+abstract project AVR_Tool_Options is
 
    type Build_Type is ("Production", "Debug");
-   Build : Build_Type := external ("RUNTIME_BUILD", "Debug");
+   Build : Build_Type := external ("AVR_RUNTIME_BUILD", "Debug");
 
-   --  COMFLAGS here is common flags (used for C and Ada).
+   --  COMFLAGS here is common flags (used for Assembler, C and Ada).
    COMFLAGS := ("-fcallgraph-info=su,da",
                 "-ffunction-sections",  --  create separate function sections
-                "-fdata-sections");     --  create separate data sections
+                "-fdata-sections",      --  create separate data sections
+                "-mmcu=" & MCU.MCU);    --  set the target device 
 
    --  Per language flags (COMFLAGS will be added later)
    ADAFLAGS := ("-gnatg",          --  internal GNAT implementation mode.
                 "-gnatn",          --  enable inlining across modules
                 "-gnatef",         --  full path in error messages
                 "-fverbose-asm",   --  include names of variables in asm code
-                "-nostdinc",       --  Don't search the default location for the RTS.
-                "-fno-delete-null-pointer-checks" --  ???
+                "-nostdinc"        --  Don't search the default location for the RTS.
+                --  "-fno-delete-null-pointer-checks" --  This is complete disabled on AVR anyway
                );
    ASMFLAGS := ("");
    CFLAGS := ("-DIN_RTS",
-              "-Dinhibit_libc", "-Wall");
+              "-Dinhibit_libc", 
+              "-Wall");
    case Build is
       when "Production" =>
-         --  Optimize
+         --  Optimize for size
          COMFLAGS := COMFLAGS & ("-Os");
          ADAFLAGS := ADAFLAGS & ("-gnatp",     --  suppress run-time checks
                                  "-frename-registers", 
@@ -42,8 +46,7 @@ abstract project AVR_Options is
       when "Debug" =>
          --  Disable optimization and add debug symbols
          COMFLAGS := COMFLAGS & ("-Og",           --  optimize for debugging
-                                 "-g",            --  generate debug symbols
-                                 "-gdwarf-2",     --  generate debug symbols
+                                 "-gdwarf-2"      --  generate debug symbols in dwarf-2 format
                                 );
          ASMFLAGS := ASMFLAGS & ("-g");
    end case;
@@ -51,5 +54,6 @@ abstract project AVR_Options is
    --  Concatenate with common flags
    ALL_ADAFLAGS := ADAFLAGS & COMFLAGS;
    ALL_CFLAGS := CFLAGS & COMFLAGS;
+   ALL_ASMFLAGS := ASMFLAGS & COMFLAGS;
    
-end AVR_Options;
+end AVR_Tool_Options;
