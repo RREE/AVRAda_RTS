@@ -23,21 +23,25 @@ project AVRAda_RTS is
 
    package Compiler is
       for Default_Switches ("C") use AVR_Tool_Options.ALL_CFLAGS;
-      for Default_Switches ("Ada") use AVR_Tool_Options.ALL_ADAFLAGS;
+      for Default_Switches ("Ada") use AVR_Tool_Options.ALL_ADAFLAGS
+        & ("-gnatg",          --  internal GNAT implementation mode.
+           "-nostdinc"        --  Don't search the default location for the RTS.
+          );
+
       for Default_Switches ("Asm_CPP") use AVR_Tool_Options.ASMFLAGS;
 
       --  Some runtime files need to be compiled with debug info, so that gdb
       --  is not blind.
-      for Switches ("a-except.adb") use AVR_Tool_Options.ALL_ADAFLAGS
+      for Switches ("a-except.adb") use Compiler'Default_Switches ("Ada")
         & ("-g", "-O1", "-fno-inline", "-fno-toplevel-reorder");
-      -- for Switches ("s-excdeb.adb") use AVR_Tool_Options.ALL_ADAFLAGS
+      -- for Switches ("s-excdeb.adb") use Compiler'Default_Switches ("Ada")
       --   & ("-g", "-O0");
-      -- for Switches ("a-tags.adb") use AVR_Tool_Options.ALL_ADAFLAGS
-      --   & ("-g");
+      for Switches ("a-tags.adb") use Compiler'Default_Switches ("Ada")
+        & ("-g");
 
       --  Generate ada_target_properties to give target-specific information
       --  to formal verification tools.
-      for Switches ("system.ads") use AVR_Tool_Options.ALL_ADAFLAGS
+      for Switches ("system.ads") use Compiler'Default_Switches ("Ada") 
         & ("-gnatet=" & Project'Project_Dir & "/ada_target_properties");
    end Compiler;
    

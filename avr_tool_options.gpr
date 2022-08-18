@@ -3,31 +3,32 @@
 --  to the corresponding variables there. Target configurations may
 --  their own version of this file.
 
-with "mcu.gpr";
+with "config/avrada_rts_config.gpr";
 
 abstract project AVR_Tool_Options is
 
    type Build_Type is ("Production", "Debug");
    Build : Build_Type := external ("AVR_RUNTIME_BUILD", "Debug");
-
+   
+   MCU := AVRAda_RTS_Config.AVR_MCU;
+   
    --  COMFLAGS here is common flags (used for Assembler, C and Ada).
    COMFLAGS := ("-fcallgraph-info=su,da",
                 "-ffunction-sections",  --  create separate function sections
                 "-fdata-sections",      --  create separate data sections
-                "-mmcu=" & MCU.MCU);    --  set the target device 
+                "-mmcu=" & MCU);        --  set the target device 
 
    --  Per language flags (COMFLAGS will be added later)
-   ADAFLAGS := ("-gnatg",          --  internal GNAT implementation mode.
-                "-gnatn",          --  enable inlining across modules
-                "-gnatef",         --  full path in error messages
-                "-fverbose-asm",   --  include names of variables in asm code
-                "-nostdinc"        --  Don't search the default location for the RTS.
+   ADAFLAGS := ("-gnatef",           --  full path in error messages
+                "-fverbose-asm",     --  include names of variables in asm code
+                "-gnateDMCU=" & Mcu  --  name of the micro controler for preprocessor
                 --  "-fno-delete-null-pointer-checks" --  This is complete disabled on AVR anyway
                );
    ASMFLAGS := ("");
    CFLAGS := ("-DIN_RTS",
               "-Dinhibit_libc", 
               "-Wall");
+   
    case Build is
       when "Production" =>
          --  Optimize for size
@@ -44,9 +45,9 @@ abstract project AVR_Tool_Options is
                                  "-gnatVn",    --  no validity checks (smaller code)
                                  "-gnatn2");   --  full inlining across units
       when "Debug" =>
-         --  Disable optimization and add debug symbols
-         COMFLAGS := COMFLAGS & ("-Og",           --  optimize for debugging
-                                 "-gdwarf-2"      --  generate debug symbols in dwarf-2 format
+         --  Set optimization for debug and add specific debug symbols
+         COMFLAGS := COMFLAGS & ("-Og",        --  optimize for debugging
+                                 "-gdwarf-2"   --  generate debug symbols in dwarf-2 format
                                 );
          ASMFLAGS := ASMFLAGS & ("-g");
    end case;

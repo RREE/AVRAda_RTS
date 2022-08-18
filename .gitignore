@@ -1,8 +1,10 @@
 /adalib*/
 /alire/
 /config/
+/obj/
 ada_target_properties
 *.o
 *.ali
 *.a
 *.elf
+*~
