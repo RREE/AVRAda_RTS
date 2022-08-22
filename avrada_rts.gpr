@@ -15,7 +15,7 @@ project AVRAda_RTS is
    for Library_Dir use "adalib";
    for Object_Dir use "obj";
 
-   for Source_Dirs use ("gnat", "asm");
+   for Source_Dirs use ("gnat", "asm", "config");
 
    package Naming is
       for Spec_Suffix ("Asm_CPP") use ".inc";
@@ -45,29 +45,4 @@ project AVRAda_RTS is
         & ("-gnatet=" & Project'Project_Dir & "/ada_target_properties");
    end Compiler;
    
-   --  Provide options for binder and linker.  They are not needed for
-   --  the RTS itself, but can be referenced in the application
-   --  gpr-files
-   
-   package Binder is
-      for Default_Switches ("Ada") use
-        (
-         --  "--RTS=" & Arch, -- binder must know about RTS
-         "-D100",         -- set secondary stack size
-         "-minimal"       -- smaller binder file
-        );
-   end Binder;
-   
-   
-   package Linker is
-      for Default_Switches ("Ada") use 
-        (
-         -- linking the MCU specific libgcc and lib<<mcu>> 
-         "-mmcu=" & MCU.MCU,
-         "-Wl,--gc-sections",     -- remove sections of unused code
-         "-g",                    -- keep binder file (needed???)
-         "-Wl,--relax"            -- linker relaxation
-        ); 
-   end Linker;
-
 end AVRAda_RTS;

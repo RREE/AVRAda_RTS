@@ -75,31 +75,34 @@ package Interfaces.C is
    ------------------------------------
    -- Wide Character and Wide String --
    ------------------------------------
+   --
+   --  not supported on AVR
+   --
 
-   type wchar_t is new Wide_Character;
-   for wchar_t'Size use Standard'Wchar_T_Size;
+   --  type wchar_t is new Wide_Character;
+   --  for wchar_t'Size use Standard'Wchar_T_Size;
 
-   wide_nul : constant wchar_t := wchar_t'First;
+   --  wide_nul : constant wchar_t := wchar_t'First;
 
    --  The remaining declarations are for Ada 2005 (AI-285)
    --  ISO/IEC 10646:2003 compatible types defined by SC22/WG14 document N1010
 
-   type char16_t is new Wide_Character;
-   pragma Ada_05 (char16_t);
+   --  type char16_t is new Wide_Character;
+   --  pragma Ada_05 (char16_t);
 
-   char16_nul : constant char16_t := char16_t'Val (0);
-   pragma Ada_05 (char16_nul);
+   --  char16_nul : constant char16_t := char16_t'Val (0);
+   --  pragma Ada_05 (char16_nul);
 
-   type char16_array is array (size_t range <>) of aliased char16_t;
-   pragma Ada_05 (char16_array);
+   --  type char16_array is array (size_t range <>) of aliased char16_t;
+   --  pragma Ada_05 (char16_array);
 
-   type char32_t is new Wide_Wide_Character;
-   pragma Ada_05 (char32_t);
+   --  type char32_t is new Wide_Wide_Character;
+   --  pragma Ada_05 (char32_t);
 
-   char32_nul : constant char32_t := char32_t'Val (0);
-   pragma Ada_05 (char32_nul);
+   --  char32_nul : constant char32_t := char32_t'Val (0);
+   --  pragma Ada_05 (char32_nul);
 
-   type char32_array is array (size_t range <>) of aliased char32_t;
-   pragma Ada_05 (char32_array);
+   --  type char32_array is array (size_t range <>) of aliased char32_t;
+   --  pragma Ada_05 (char32_array);
 
 end Interfaces.C;

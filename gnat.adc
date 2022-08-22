@@ -1,0 +1,265 @@
+-- -*- Ada -*-
+---------------------------------------------------------------------------
+-- The AVR-Ada Library is free software;  you can redistribute it and/or --
+-- modify it under terms of the  GNU General Public License as published --
+-- by  the  Free Software  Foundation;  either  version 2, or  (at  your --
+-- option) any later version.  The AVR-Ada Library is distributed in the --
+-- hope that it will be useful, but  WITHOUT ANY WARRANTY;  without even --
+-- the  implied warranty of MERCHANTABILITY or FITNESS FOR A  PARTICULAR --
+-- PURPOSE. See the GNU General Public License for more details.         --
+--                                                                       --
+-- As a special exception, if other files instantiate generics from this --
+-- unit,  or  you  link  this  unit  with  other  files  to  produce  an --
+-- executable   this  unit  does  not  by  itself  cause  the  resulting --
+-- executable to  be  covered by the  GNU General  Public License.  This --
+-- exception does  not  however  invalidate  any  other reasons why  the --
+-- executable file might be covered by the GNU Public License.           --
+---------------------------------------------------------------------------
+
+--  This is a global file containing compilation options.
+--
+--  Although we don't have a run time system (yet), we pretend that we
+--  have and at the same time we restrict the possibilities as much as
+--  possible.
+
+-- pragma No_Run_Time;
+
+pragma Restrictions (Simple_Barriers);
+--  This restriction ensures at compile time that barriers in entry
+--  declarations for protected types are restricted to references to
+--  simple boolean variables defined in the private part of the
+--  protected type. No other form of entry barriers is permitted. This
+--  is one of the restrictions of the Ravenscar profile for limited
+--  tasking (see also pragma Ravenscar).
+
+pragma Restrictions (Max_Entry_Queue_Length => 1);
+--  This restriction is a declaration that any protected entry
+--  compiled in the scope of the restriction has at most the specified
+--  number of tasks waiting on the entry at any one time, and so no
+--  queue is required. This restriction is not checked at compile
+--  time. A program execution is erroneous if an attempt is made to
+--  queue more than the specified number of tasks on such an entry.
+
+-- pragma Restrictions (No_Calendar);
+--  This restriction ensures at compile time that there is no implicit
+--  or explicit dependence on the package Ada.Calendar.
+
+pragma Restrictions (No_Dynamic_Attachment);
+--  This restriction ensures at compile time that there is no attempt
+--  to dynamically associate interrupts. Only static association is
+--  allowed.
+
+pragma Restrictions (No_Enumeration_Maps);
+--  This restriction ensures at compile time that no operations
+--  requiring enumeration maps are used (that is Image and Value
+--  attributes applied to enumeration types).
+
+pragma Restrictions (No_Entry_Calls_In_Elaboration_Code);
+--  This restriction ensures at compile time that no task or protected
+--  entry calls are made during elaboration code. As a result of the
+--  use of this restriction, the compiler can assume that no code past
+--  an accept statement in a task can be executed at elaboration time.
+
+--  pragma Restrictions (No_Exception_Handlers);
+--  This restriction ensures at compile time that there are no
+--  explicit exception handlers.
+
+pragma Restrictions (No_Exception_Propagation);
+
+--  pragma Restrictions(No_Implicit_Conditionals);
+--  This restriction ensures that the generated code does not contain
+--  any implicit conditionals, either by modifying the generated code
+--  where possible, or by rejecting any construct that would otherwise
+--  generate an implicit conditional. The details and use of this
+--  restriction are described in more detail in the High Integrity
+--  product documentation.
+
+--  pragma Restrictions(No_Implicit_Loops);
+--  This restriction ensures that the generated code does not contain
+--  any implicit for loops, either by modifying the generated code
+--  where possible, or by rejecting any construct that would otherwise
+--  generate an implicit for loop. The details and use of this
+--  restriction are described in more detail in the High Integrity
+--  product documentation.
+
+pragma Restrictions(No_Local_Protected_Objects);
+--  This restriction ensures at compile time that protected objects
+--  are only declared at the library level.
+
+pragma Restrictions(No_Protected_Type_Allocators);
+--  This restriction ensures at compile time that there are no
+--  allocator expressions that attempt to allocate protected objects.
+
+--  pragma Restrictions (No_Secondary_Stack);
+--  This restriction ensures at compile time that the generated code
+--  does not contain any reference to the secondary stack. The
+--  secondary stack is used to implement functions returning
+--  unconstrained objects (arrays or records) on some targets. The
+--  details and use of this restriction are described in more detail
+--  in the High Integrity product documentation.
+
+pragma Restrictions(No_Select_Statements);
+--  This restriction ensures at compile time no select statements of
+--  any kind are permitted, that is the keyword select may not
+--  appear. This is one of the restrictions of the Ravenscar profile
+--  for limited tasking (see also pragma Ravenscar).
+
+-- pragma Restrictions(No_Standard_Storage_Pools);
+--  This restriction ensures at compile time that no access types use
+--  the standard default storage pool. Any access type declared must
+--  have an explicit Storage_Pool attribute defined specifying a
+--  user-defined storage pool.
+
+-- pragma Restrictions(No_Streams);
+--  This restriction ensures at compile time that there are no
+--  implicit or explicit dependencies on the package Ada.Streams.
+
+pragma Restrictions(No_Task_Attributes_Package);
+--  This restriction ensures at compile time that there are no
+--  implicit or explicit dependencies on the package
+--  Ada.Task_Attributes.
+
+pragma Restrictions(No_Task_Termination);
+--  This restriction ensures at compile time that no terminate
+--  alternatives appear in any task body.
+
+pragma Restrictions(No_Tasking);
+--  This restriction prevents the declaration of tasks or task types
+--  throughout the partition. It is similar in effect to the use of
+--  Max_Tasks => 0 except that violations are caught at compile time
+--  and cause in illegality to be signalled either by the compiler or
+--  binder.
+
+pragma Restrictions(No_Wide_Characters);
+--  This restriction ensures at compile time that no uses of the types
+--  Wide_Character or Wide_String appear, and that no wide character
+--  literals appear in the program (that is literals representing
+--  characters not in type Character.
+
+pragma Restrictions(Static_Priorities);
+--  This restriction ensures at compile time that all priority
+--  expressions are static, and that there are no dependencies on the
+--  package Ada.Dynamic_Priorities.
+
+pragma Restrictions(Static_Storage_Size);
+--  This restriction ensures at compile time that any expression
+--  appearing in a Storage_Size pragma or attribute definition clause
+--  is static.
+
+
+--  Safety and Security Restrictions
+--  ================================
+
+--  This clause defines restrictions that can be used with pragma
+--  Restrictions (see 13.12); these facilitate the demonstration of
+--  program correctness by allowing tailored versions of the run-time
+--  system.
+
+--  Static Semantics
+
+--  The following restrictions, the same as in D.7, apply in this
+--  Annex: No_Task_Hierarchy, No_Abort_Statement,
+--  No_Implicit_Heap_Allocation, Max_Task_Entries is 0,
+--  Max_Asynchronous_Select_Nesting is 0, and Max_Tasks is 0. The last
+--  three restrictions are checked prior to program execution.
+
+--  The following additional restrictions apply in this Annex.
+
+
+--  Tasking-related restriction:
+--  ============================
+
+-- pragma Restrictions (No_Protected_Types);
+--  There are no declarations of protected types or protected objects.
+
+
+--  Memory-management related restrictions:
+--  =======================================
+
+--  pragma Restrictions (No_Allocators);
+--  There are no occurrences of an allocator.
+
+--  pragma Restrictions (No_Local_Allocators);
+--  Allocators are prohibited in subprograms, generic subprograms,
+--  tasks, and entry bodies; instantiations of generic packages are
+--  also prohibited in these contexts.
+
+pragma Restrictions (No_Implicit_Heap_Allocations);
+--  This prohibits implicit allocations (for example an array with
+--  non-static subscript bounds declared at library level).
+
+--  pragma Restrictions (No_Unchecked_Deallocation);
+--  Semantic dependence on Unchecked_Deallocation is not allowed.
+
+pragma Restrictions (Immediate_Reclamation);
+--  Except for storage occupied by objects created by allocators and
+--  not deallocated via unchecked deallocation, any storage reserved
+--  at run time for an object is immediately reclaimed when the object
+--  no longer exists.
+
+pragma Restrictions (No_Finalization);
+
+
+--  Exception-related restriction:
+--  ==============================
+
+--  pragma Restrictions (No_Exceptions);
+--  Raise_statements and exception_handlers are not allowed.  No
+--  language-defined run-time checks are generated; however, a
+--  run-time check performed automatically by the hardware is
+--  permitted.
+
+--  Program execution is erroneous if pragma
+--  Restrictions(No_Exceptions) has been specified and the conditions
+--  arise under which a generated language-defined run-time check
+--  would fail.
+
+
+--  Other restrictions:
+--  ===================
+
+-- pragma Restrictions (No_Floating_Point);
+--  Uses of predefined floating point types and operations, and
+--  declarations of new floating point types, are not allowed.
+
+-- pragma Restrictions (No_Fixed_Point);
+--  Uses of predefined fixed point types and operations, and
+--  declarations of new fixed point types, are not allowed.
+
+-- pragma Restrictions (No_Unchecked_Conversion);
+--  Semantic dependence on the predefined generic Unchecked_Conversion
+--  is not allowed.
+
+-- pragma Restrictions (No_Access_Subprograms);
+--  The declaration of access-to-subprogram types is not allowed.
+
+-- pragma Restrictions (No_Unchecked_Access);
+--  The Unchecked_Access attribute is not allowed.
+
+-- pragma Restrictions (No_Dispatch);
+--  Occurrences of T’Class are not allowed, for any (tagged) subtype
+--  T.
+
+pragma Restrictions (No_IO);
+--  Semantic dependence on any of the library units Sequential_IO,
+--  Direct_IO, Text_IO, Wide_Text_IO, or Stream_IO is not allowed.
+
+-- pragma Restrictions (No_Delay);
+--  Delay_Statements and semantic dependence on package Calendar are
+--  not allowed.
+
+-- pragma Restrictions (No_Recursion);
+--  As part of the execution of a subprogram, the same subprogram is
+--  not invoked.
+
+--  Program execution is erroneous if pragma
+--  Restrictions(No_Recursion) has been specified and a subprogram is
+--  invoked as part of its own execution, or if pragma
+
+pragma Restrictions (No_Reentrancy);
+--  During the execution of a subprogram by a task, no other task
+--  invokes the same subprogram.
+
+--  Restrictions(No_Reentrancy) has been specified and during the
+--  execution of a subprogram by a task, another task invokes the same
+--  subprogram.

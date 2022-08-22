@@ -57,4 +57,26 @@ abstract project AVR_Tool_Options is
    ALL_CFLAGS := CFLAGS & COMFLAGS;
    ALL_ASMFLAGS := ASMFLAGS & COMFLAGS;
    
+   package Builder is
+      for Global_Configuration_Pragmas use "gnat.adc";
+      for Executable_Suffix use ".elf";
+   end Builder;
+   
+   
+   --  Provide options for binder and linker.  They are not needed for
+   --  the RTS itself, but must be referenced in the application
+   --  gpr-files
+   
+   Binder_Switches := (--  "--RTS=" & Arch, -- binder must know about RTS
+                       "-D" & AVRAda_RTS_Config.Sec_Stack_Size,  -- set secondary stack size
+                       "-minimal"       -- smaller binder file
+                      );
+   
+   Linker_Switches := (-- linking the MCU specific libgcc and lib<<mcu>> 
+                       "-mmcu=" & MCU,
+                       "-Wl,--gc-sections", -- remove sections of unused code
+                       "-g",                -- keep binder file (needed???)
+                       "-Wl,--relax"        -- linker relaxation is a must on AVR
+                      ); 
+
 end AVR_Tool_Options;
