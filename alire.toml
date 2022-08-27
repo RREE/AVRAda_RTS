@@ -10,12 +10,8 @@ website = "https://sourceforge.net/projects/avr-ada/"
 
 [configuration.variables]
 AVR_MCU          = { type = "String", default = "none" }
-Sec_Stack_Size   = { type = "Integer", first = 0, last = 1024, default = 127 }
+Sec_Stack_Size   = { type = "Integer", first = 0, last = 1024, default = 63 }
 Clock_Frequency  = { type = "Integer", first = 0, default = 0 }
-
-# [configuration.values]
-# avrada_rts.AVR_MCU = "atmega328p"
-# avrada_rts.Clock_Frequency = 16_000_000
 
 [[depends-on]]
 gnat_avr_elf = "^11"
