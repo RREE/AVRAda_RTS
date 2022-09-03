@@ -34,7 +34,13 @@ Then edit your project file to add the following elements:
       for Runtime ("Ada") use AVRAda_RTS'Runtime ("Ada");
    ```
 
-It is highly recommended to also check out the crate `AVRAda_MCU`.  It
-contains port and bit definitions for most MCUs released in the years
-around 2010 - 2015.  If you use the more modern atxmega or attiny MCUs
-you currently (fall 2022) have write you own.
+It is highly recommended to also check out the crate
+[`AVRAda_MCU`](https://github.com/RREE/AVRAda_MCU).  It contains port
+and bit definitions for most MCUs released in the years around 2010 -
+2015.  If you use the more modern atxmega or attiny MCUs you currently
+(fall 2022) have write you own.
+
+You can control most on-chip peripherals like timers, GPIOs,
+AD-converters, etc. with the routines of
+[`AVRAda_Lib`](https://github.com/RREE/AVRAda_Lib).  See the examples
+in [`AVRAda_Examples`](https://github.com/RREE/AVRAda_Examples).
