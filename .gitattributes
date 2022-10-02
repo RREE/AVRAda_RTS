@@ -1,0 +1,7 @@
+# The files of the runtime system habe to be compiled with the -gnatg
+# option (GNAT implementation checks).  These include a style check
+# that there are no CRLF line endings.  Unix line endings with a
+# single LF are obligatory.
+*.ads text eol=lf
+*.adb text eol=lf
+*.inc text eol=lf

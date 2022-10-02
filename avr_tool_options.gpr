@@ -22,7 +22,7 @@ abstract project AVR_Tool_Options is
    ADAFLAGS := ("-gnatef",           --  full path in error messages
                 "-fverbose-asm",     --  include names of variables in asm code
                 "-gnateDMCU=" & Mcu  --  name of the micro controler for preprocessor
-                --  "-fno-delete-null-pointer-checks" --  This is complete disabled on AVR anyway
+                --  "-fno-delete-null-pointer-checks" --  This is completely disabled on AVR anyway
                );
    ASMFLAGS := ("");
    CFLAGS := ("-DIN_RTS",

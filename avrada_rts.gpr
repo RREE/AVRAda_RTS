@@ -1,5 +1,4 @@
 with "avr_tool_options.gpr";
-with "mcu.gpr";
 
 project AVRAda_RTS is
 
