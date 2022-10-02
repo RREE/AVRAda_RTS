@@ -15,5 +15,5 @@ Sec_Stack_Size   = { type = "Integer", first = 0, last = 1024, default = 63 }
 Clock_Frequency  = { type = "Integer", first = 0, default = 0 }
 
 [[depends-on]]
-gnat_avr_elf = "^11"
+gnat_avr_elf = "^11 | ^12.2"
 
