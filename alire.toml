@@ -1,6 +1,6 @@
 name = "avrada_rts"
 description = "Minimal run time system (RTS) for AVR 8bit controllers"
-version = "2.0.0"
+version = "2.0.1"
 
 authors = ["Adacore", "Rolf Ebert"]
 maintainers = ["Rolf Ebert <rolf.ebert@gcc.gmx.de>"]

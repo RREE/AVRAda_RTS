@@ -1,9 +1,9 @@
 # AVR-Ada runtime system
-Minimal run time system (RTS) for AVR 8bit controllers
+Minimal Run Time System (RTS) for AVR 8bit Controllers
 
 ## Usage
 
-First edit you `alire.toml` file and add the following elements:
+Edit your `alire.toml` file in your application crate and add the following elements:
 - Add `avrada_rts` in the dependency list and set some configuration values,
 i.e. the actual MCU in your project and the clock frequency.  The
 typical Arduino boards have an atmeg328p running at 16MHz.  The
